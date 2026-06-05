@@ -9,7 +9,9 @@ POEditor uses **`term` + `context`** as the unique identifier. All operations on
 ```json
 { "term": "save", "context": "button" }
 ```
+
 vs.
+
 ```json
 { "term": "save", "context": "menu" }
 ```

@@ -1,10 +1,12 @@
 # Deployment
 
-The POEditor MCP server is a **remote MCP server** operated by POEditor. There is nothing to install or deploy on your side — connect your MCP client directly to the endpoint.
+The POEditor MCP server is a **remote MCP server** operated by POEditor.
+There is nothing to install or deploy on your side — connect your MCP client
+directly to the endpoint.
 
 ## Endpoint
 
-```
+```text
 https://mcp.poeditor.com/mcp
 ```
 
@@ -27,8 +29,11 @@ Add the endpoint to your MCP client config:
 }
 ```
 
-See [`../examples/`](../examples) for client-specific configs (Claude Desktop, Cursor, Windsurf, Cline, VS Code, Continue).
+See [`../examples/`](../examples) for client-specific configs (Claude Desktop,
+Cursor, Windsurf, Cline, VS Code, Continue).
 
 ## Custom deployments
 
-For air-gapped environments, regulated industries, or other custom-deployment requirements, contact [info@poeditor.com](mailto:info@poeditor.com).
+For air-gapped environments, regulated industries, or other
+custom-deployment requirements, contact
+[info@poeditor.com](mailto:info@poeditor.com).

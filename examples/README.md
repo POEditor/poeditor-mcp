@@ -5,7 +5,7 @@ Drop-in config snippets for popular MCP clients. Replace `YOUR_POEDITOR_API_TOKE
 | Client | Config file | Config location |
 |---|---|---|
 | Claude Code | [claude_code.md](./claude_code.md) | CLI command — OAuth supported natively |
-| Claude Desktop | [claude_desktop_config.json](./claude_desktop_config.json) | macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`<br>Windows: `%APPDATA%\Claude\claude_desktop_config.json` |
+| Claude Desktop | [claude_desktop_config.json](./claude_desktop_config.json) | macOS: `~/Library/Application Support/Claude/` · Windows: `%APPDATA%\Claude\` |
 | Cursor | [cursor_config.json](./cursor_config.json) | `~/.cursor/mcp.json` |
 | Windsurf | [windsurf_config.json](./windsurf_config.json) | `~/.codeium/windsurf/mcp_config.json` |
 | VS Code (Copilot) | [vscode_copilot.json](./vscode_copilot.json) | `.vscode/mcp.json` |

@@ -6,7 +6,7 @@
 2. Click **Generate token** (or copy an existing one).
 3. Pass it on every request as:
 
-   ```
+   ```http
    Authorization: Bearer <token>
    ```
 
@@ -18,18 +18,21 @@
 
 ### Rotation
 
-Tokens don't expire. Rotate manually if compromised — old token can be revoked from the API access page.
+Tokens don't expire. Rotate manually if compromised — old token can be
+revoked from the API access page.
 
 ### Rate limits
 
 - Standard POEditor API limits apply: **60 requests/minute** per token.
-- MCP server batches where possible. Heavy operations (full project export, bulk imports) count as one request.
+- MCP server batches where possible. Heavy operations (full project export,
+  bulk imports) count as one request.
 
 ---
 
 ## OAuth 2.1
 
-OAuth 2.1 with PKCE is supported and is the recommended auth method for MCP clients that implement it. Used by:
+OAuth 2.1 with PKCE is supported and is the recommended auth method for MCP
+clients that implement it. Used by:
 
 - Claude Code (automatic browser flow)
 - Claude.ai Connectors
@@ -37,7 +40,7 @@ OAuth 2.1 with PKCE is supported and is the recommended auth method for MCP clie
 
 ### Flow
 
-```
+```text
 1. Client opens https://poeditor.com/oauth/authorize?...
 2. User logs in to POEditor and grants access
 3. Redirect with auth code → client exchanges for access token
@@ -46,7 +49,8 @@ OAuth 2.1 with PKCE is supported and is the recommended auth method for MCP clie
 
 ### Scopes
 
-The server requests `read write` scope, granting full access to the authenticated user's projects.
+The server requests `read write` scope, granting full access to the
+authenticated user's projects.
 
 | Scope | Grants |
 |---|---|

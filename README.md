@@ -12,7 +12,7 @@
 
 ## Endpoint
 
-```
+```text
 https://mcp.poeditor.com/mcp
 ```
 
@@ -28,9 +28,7 @@ Generate a token at [poeditor.com/account/api](https://poeditor.com/account/api)
 
 ### 2. Add to your client
 
-**Claude Code**
-
-OAuth — browser login, no token needed:
+**Claude Code** — OAuth or API token:
 
 ```bash
 claude mcp add poeditor --transport http https://mcp.poeditor.com/mcp
@@ -159,7 +157,7 @@ See [`examples/`](./examples) for Cline, Continue, Augment, and other client con
 
 Ask your assistant:
 
-```
+```text
 List all my POEditor projects
 ```
 
@@ -201,7 +199,7 @@ Token scope: user's own projects only. No cross-tenant access. See [Authenticati
 
 ## Examples
 
-```
+```text
 List all my POEditor projects
 Show me untranslated terms in project 123456 for Spanish
 Add the term "checkout_button" with English value "Check out" to project 123456

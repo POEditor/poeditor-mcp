@@ -4,9 +4,12 @@ Thanks for your interest in improving the POEditor MCP server.
 
 ## What you can contribute
 
-This repository hosts documentation, examples, and (eventually) self-host packaging for the **official** POEditor MCP server. The server itself is operated by POEditor at `https://mcp.poeditor.com/mcp`.
+This repository hosts documentation, examples, and (eventually) self-host
+packaging for the **official** POEditor MCP server. The server itself is
+operated by POEditor at `https://mcp.poeditor.com/mcp`.
 
 **Welcome:**
+
 - Bug reports — open an issue with reproduction steps
 - Documentation fixes / clarifications
 - New client config examples (Zed, JetBrains AI Assistant, etc.)
@@ -14,8 +17,8 @@ This repository hosts documentation, examples, and (eventually) self-host packag
 - Translation of docs
 
 **Out of scope (here):**
+
 - Server-side code changes (managed internally — request via issue)
-- Forks competing with the official remote server — but check out the community implementations: [ryan-shaw/poeditor-mcp](https://github.com/ryan-shaw/poeditor-mcp), [r-pedraza/poeditor-mcp](https://github.com/r-pedraza/poeditor-mcp)
 
 ## Pull request workflow
 
@@ -29,13 +32,16 @@ Small, focused PRs are easier to review.
 ## Reporting issues
 
 Include:
+
 - MCP client name + version
 - Steps to reproduce
 - Expected vs. actual behavior
 - Relevant logs (with tokens redacted)
 
-For security issues: email **info@poeditor.com** — do not file public issues.
+For security issues: email [info@poeditor.com](mailto:info@poeditor.com) —
+do not file public issues.
 
 ## Code of conduct
 
-Be respectful. POEditor follows the [Contributor Covenant](https://www.contributor-covenant.org/).
+Be respectful. POEditor follows the
+[Contributor Covenant](https://www.contributor-covenant.org/).
