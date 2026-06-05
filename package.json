@@ -1,0 +1,37 @@
+{
+  "name": "@poeditor/mcp",
+  "version": "1.0.0",
+  "description": "Official POEditor MCP server — connect Claude, Cursor, Windsurf and any MCP-compatible AI client to POEditor translation management.",
+  "homepage": "https://mcp.poeditor.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/poeditor/poeditor-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/poeditor/poeditor-mcp/issues",
+    "email": "info@poeditor.com"
+  },
+  "license": "MIT",
+  "author": "POEditor <info@poeditor.com>",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "model-context-protocol",
+    "claude",
+    "anthropic",
+    "cursor",
+    "windsurf",
+    "poeditor",
+    "translation",
+    "localization",
+    "i18n",
+    "l10n",
+    "tms",
+    "translation-management"
+  ],
+  "mcp": {
+    "endpoint": "https://mcp.poeditor.com/mcp",
+    "transport": "http",
+    "auth": "bearer"
+  }
+}

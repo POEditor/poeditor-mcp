@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "poeditor": {
+      "url": "https://mcp.poeditor.com/mcp",
+      "headers": {
+        "Authorization": "Bearer YOUR_POEDITOR_API_TOKEN"
+      },
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}

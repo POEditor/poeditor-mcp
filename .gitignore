@@ -1,0 +1,33 @@
+# Secrets
+.env
+.env.local
+*.token
+*-token.txt
+
+# Node
+node_modules/
+dist/
+build/
+*.log
+npm-debug.log*
+.npm
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Python (for tooling scripts)
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+venv/
+.venv/
+
+# Local
+*.local
+.cache/

@@ -1,0 +1,17 @@
+{
+  "context_servers": {
+    "poeditor": {
+      "command": {
+        "path": "npx",
+        "args": [
+          "-y",
+          "mcp-remote",
+          "https://mcp.poeditor.com/mcp",
+          "--header",
+          "Authorization: Bearer YOUR_POEDITOR_API_TOKEN"
+        ]
+      },
+      "settings": {}
+    }
+  }
+}
