@@ -28,10 +28,19 @@ Generate a token at [poeditor.com/account/api](https://poeditor.com/account/api)
 
 ### 2. Add to your client
 
-**Claude Code** — OAuth, no token needed:
+**Claude Code**
+
+OAuth — browser login, no token needed:
 
 ```bash
 claude mcp add poeditor --transport http https://mcp.poeditor.com/mcp
+```
+
+On first use Claude Code opens a browser for POEditor login and stores the token automatically. To use an API token instead:
+
+```bash
+claude mcp add poeditor --transport http https://mcp.poeditor.com/mcp \
+  --header "Authorization: Bearer YOUR_POEDITOR_API_TOKEN"
 ```
 
 **Claude Desktop** — edit `claude_desktop_config.json`:
