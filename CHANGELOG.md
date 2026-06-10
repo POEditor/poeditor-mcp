@@ -3,6 +3,19 @@
 All notable changes to the POEditor MCP server.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Added
+
+- `mark_translations_proofread` — set or clear the proofread flag on
+  translations for a language; requires proofreading enabled on the project
+- `qa_checks` — run QA checks for a language; returns flagged translations
+  with per-item `errors` arrays
+- `rise_360_xliff` export format added to `export_strings_file`
+- Total tool count: 34 → 36
+
+---
+
 ## [1.1.0] — 2026-06-05
 
 ### Added

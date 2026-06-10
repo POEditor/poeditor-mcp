@@ -35,7 +35,7 @@ These are two different entities.
 
 ### export_strings_file formats
 
-`po`, `pot`, `mo`, `json`, `key_value_json`, `i18next`, `arb`, `csv`, `ini`, `properties`, `resw`, `resx`, `ts`, `apple_strings`, `xliff`, `xliff_1_2`, `xlf`, `xmb`, `xtb`, `android_strings`, `yml`, `xcstrings`, `xls`, `xlsx`
+`po`, `pot`, `mo`, `json`, `key_value_json`, `i18next`, `arb`, `csv`, `ini`, `properties`, `resw`, `resx`, `ts`, `apple_strings`, `xliff`, `xliff_1_2`, `rise_360_xliff`, `xlf`, `xmb`, `xtb`, `android_strings`, `yml`, `xcstrings`, `xls`, `xlsx`
 
 ---
 
@@ -43,7 +43,7 @@ These are two different entities.
 
 | Tool | Description |
 |---|---|
-| `available_languages` | Full list of all languages POEditor supports (~100), with names and codes |
+| `available_languages` | Full list of all languages POEditor supports (280+), with names and codes |
 | `list_languages` | Languages enabled in a project, with translation % and last update time |
 | `add_language` | Add a language to a project |
 | `update_language` | Bulk add-or-overwrite: fills untranslated terms AND overwrites existing in one call. Use `commit_translations` or `update_translations` for narrower behavior. Supports `fuzzy_trigger`. |
@@ -94,6 +94,12 @@ Four tools write translations — pick the right one:
 | `list_pending_proofread` | List translated-but-not-proofread strings for a language (requires proofreading enabled) |
 | `list_untranslated` | List terms that have no translation yet for a given language |
 
+### Proofreading
+
+| Tool | Description |
+|---|---|
+| `mark_translations_proofread` | Set or clear the proofread flag on translations for a language. Pass a `data` array of `{"term","context","flag":{"proofread":1|0}}` objects. Returns `parsed`, `matched`, and `updated` counts. Requires proofreading to be enabled on the project. |
+
 ---
 
 ## Progress
@@ -112,6 +118,14 @@ Four tools write translations — pick the right one:
 | `list_contributors` | List contributors across all projects, or filter by project or language |
 | `add_contributor` | Add a contributor (or admin) to a project; optionally grant proofreading rights |
 | `remove_contributor` | Remove a contributor or admin from a project |
+
+---
+
+## Quality
+
+| Tool | Description |
+|---|---|
+| `qa_checks` | Run QA checks for a language. Returns flagged translations in a terms-list shape, each with an `errors` array describing what failed. |
 
 ---
 

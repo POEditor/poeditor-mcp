@@ -213,7 +213,7 @@ List all contributors for project 123456
 
 ## Supported clients
 
-Anything that speaks MCP. Tested with:
+Anything that speaks MCP. Works with:
 
 - Claude Code · Claude Desktop · Claude.ai Connectors
 - Cursor · Windsurf · Zed
