@@ -6,7 +6,7 @@
 
 **Official Model Context Protocol (MCP) server for [POEditor](https://poeditor.com)** — the translation management platform. Connect any MCP-compatible AI assistant directly to your POEditor projects.
 
-> 34 tools across the full POEditor v2 API. Manage projects, terms, translations, contributors, and languages. Auto-translate with Google, Microsoft, or DeepL. Export to any format your client supports. OAuth 2.1 with PKCE.
+> 36 tools across the full POEditor v2 API. Manage projects, terms, translations, contributors, and languages. Auto-translate with Google, Microsoft, or DeepL. Export to any format your client supports. OAuth 2.1 with PKCE.
 
 ---
 
@@ -172,8 +172,9 @@ List all my POEditor projects
 | **Projects** | list, details, add, update, delete, sync, upload, export |
 | **Languages** | available languages, list project languages, add, update, delete |
 | **Terms** | list, add, update, delete, details, comment |
-| **Translations** | commit, propose, update, delete, fill from TM, list fuzzy, list pending proofread, list untranslated |
+| **Translations** | commit, propose, update, delete, fill from TM, list fuzzy, list pending proofread, list untranslated, mark proofread |
 | **Progress** | translation status, proofread progress |
+| **Quality** | QA checks |
 | **Contributors** | list, add, remove |
 | **Automation** | automatic translation (Google, Microsoft, DeepL) |
 | **Account** | account info |
@@ -225,7 +226,7 @@ Anything that speaks MCP. Works with:
 
 ## Features
 
-- Full POEditor v2 API coverage (34 tools)
+- Full POEditor v2 API coverage (36 tools)
 - Export to any format POEditor supports
 - Automatic translation via Google, Microsoft, or DeepL
 - OAuth 2.1 with PKCE
