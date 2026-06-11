@@ -226,7 +226,7 @@ Anything that speaks MCP. Works with:
 
 ## Features
 
-- Full POEditor v2 API coverage (36 tools)
+- 36 tools — full POEditor v2 API coverage plus tools beyond the raw API
 - Export to any format POEditor supports
 - Automatic translation via Google, Microsoft, or DeepL
 - OAuth 2.1 with PKCE
