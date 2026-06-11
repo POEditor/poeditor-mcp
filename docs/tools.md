@@ -98,7 +98,7 @@ Four tools write translations — pick the right one:
 
 | Tool | Description |
 |---|---|
-| `mark_translations_proofread` | Set or clear the proofread flag on translations for a language. Pass a `data` array of `{"term","context","flag":{"proofread":1|0}}` objects. Returns `parsed`, `matched`, and `updated` counts. Requires proofreading to be enabled on the project. |
+| `mark_translations_proofread` | Set or clear the proofread flag on translations for a language. Pass a `data` array of objects with `term`, `context`, and `flag.proofread` set to 1 or 0. Returns parsed, matched, and updated counts. Requires proofreading to be enabled on the project. |
 
 ---
 
