@@ -27,11 +27,25 @@ These are two different entities.
 | `list_projects` | List all projects accessible to the authenticated user |
 | `get_project_details` | Get details of a project: term count, reference language, languages, tags, settings, and creation date |
 | `add_project` | Create a new project |
-| `update_project` | Update project name, description, reference language, or fallback language |
+| `update_project` | Update project name, description, reference language, fallback language, or proofreading settings (`proofreading`, `lock_proofread`) |
 | `delete_project` | Permanently delete a project (owner only) |
 | `sync_project` | Replace all project terms with the provided list — terms not in the list are deleted. Use with caution. |
 | `upload_strings_file` | Import from a file; the `updating` param controls what is imported: `terms`, `translations`, or `terms_translations` |
 | `export_strings_file` | Export translations in any supported format — returns a 10-minute download URL |
+
+### Project settings flags
+
+Returned by `get_project_details` in the `settings` object; some are writable via `update_project`. A few only appear when their prerequisite is in place.
+
+| Flag | Meaning | Present / writable when |
+|---|---|---|
+| `public` | 1 = publicly viewable, 0 = private | Always present (read-only) |
+| `open` | 1 = Open Source project — strings are free and don't count against the plan quota | Always present (read-only) |
+| `fallback_language` | Language substituted on export when a translation is missing | Always present; writable via `update_project` |
+| `proofreading` | 1 = proofreading enabled for the owner, admins, and contributors with proofreading rights | Writable via `update_project` |
+| `lock_proofread` | 1 = contributors without proofreading rights cannot edit or delete translations flagged as proofread | Present only while `proofreading` is enabled; writable via `update_project` (takes effect only while proofreading is enabled) |
+| `moderate`, `allow_add_language`, `lock_complete` | Public-project workflow flags | Present only when the project is public (`public: 1`) |
+| `fuzzy_trigger_on_default_language` | Whether editing the reference-language translation marks the same term's other-language translations as fuzzy | Present only when a reference language is set |
 
 ### export_strings_file formats
 
@@ -126,6 +140,15 @@ Four tools write translations — pick the right one:
 | Tool | Description |
 |---|---|
 | `qa_checks` | Run QA checks for a language. Returns flagged translations in a terms-list shape, each with an `errors` array describing what failed. |
+| `evaluate_translation_quality` | Run an AI quality evaluation on completed translations for a language, scoring each 0–100 against a reference language using the MQM framework. Requires an AI provider configured on the account. |
+
+### evaluate_translation_quality details
+
+- By default only translations without a score are evaluated; translations that already have a score are skipped unless `include_evaluated` is set, which re-evaluates and replaces them. Edited translations whose score has gone stale are always re-evaluated regardless of `include_evaluated`.
+- Processes at most 50 terms per call, in ascending term-id order. When evaluating a whole language (no `terms` list), the response includes `next_term` and `done`; if `done` is false, call again with the same arguments plus `start_from_term_id` set to `next_term` to score the next batch, and repeat until `done` is true.
+- Pass `terms` (max 50) to restrict evaluation to specific terms instead of the whole language.
+- `source_language` optionally overrides the project's reference language as the comparison target.
+- Scores and their MQM reasons are stored on the project and shown in the POEditor editor.
 
 ---
 

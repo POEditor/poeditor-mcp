@@ -11,8 +11,15 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   translations for a language; requires proofreading enabled on the project
 - `qa_checks` — run QA checks for a language; returns flagged translations
   with per-item `errors` arrays
+- `evaluate_translation_quality` — AI quality evaluation of completed
+  translations, scored 0–100 per language against a reference language
+  using the MQM framework; paginates in batches of 50 terms
 - `rise_360_xliff` export format added to `export_strings_file`
-- Total tool count: 34 → 36
+- Documented project settings flags (`proofreading`, `lock_proofread`,
+  `moderate`, `allow_add_language`, `lock_complete`,
+  `fuzzy_trigger_on_default_language`) returned by `get_project_details`
+  and writable via `update_project`
+- Total tool count: 34 → 37
 
 ---
 
