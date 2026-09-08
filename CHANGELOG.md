@@ -14,12 +14,15 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `evaluate_translation_quality` — AI quality evaluation of completed
   translations, scored 0–100 per language against a reference language
   using the MQM framework; paginates in batches of 50 terms
+- `list_quality_evaluations` — list the stored AI quality-evaluation
+  scores for a language (the results produced by
+  `evaluate_translation_quality`); paginated
 - `rise_360_xliff` export format added to `export_strings_file`
 - Documented project settings flags (`proofreading`, `lock_proofread`,
   `moderate`, `allow_add_language`, `lock_complete`,
   `fuzzy_trigger_on_default_language`) returned by `get_project_details`
   and writable via `update_project`
-- Total tool count: 34 → 37
+- Total tool count: 34 → 38
 
 ---
 

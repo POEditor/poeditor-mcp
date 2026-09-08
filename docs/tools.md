@@ -141,6 +141,7 @@ Four tools write translations — pick the right one:
 |---|---|
 | `qa_checks` | Run QA checks for a language. Returns flagged translations in a terms-list shape, each with an `errors` array describing what failed. |
 | `evaluate_translation_quality` | Run an AI quality evaluation on completed translations for a language, scoring each 0–100 against a reference language using the MQM framework. Requires an AI provider configured on the account. |
+| `list_quality_evaluations` | List the stored AI quality-evaluation scores for a language — the results produced by `evaluate_translation_quality`. Paginated. |
 
 ### evaluate_translation_quality details
 
@@ -149,6 +150,14 @@ Four tools write translations — pick the right one:
 - Pass `terms` (max 50) to restrict evaluation to specific terms instead of the whole language.
 - `source_language` optionally overrides the project's reference language as the comparison target.
 - Scores and their MQM reasons are stored on the project and shown in the POEditor editor.
+
+### list_quality_evaluations details
+
+- Returns a terms-list-shaped JSON; each translation carries a `quality` object (score and MQM reasons) and a `source` block — the string the score was measured against and its language. The source isn't necessarily the project's reference language, since an evaluation can be run against any project language.
+- Only translations that lost points are listed — a perfect (100) score has nothing to report. Translations never evaluated are also omitted; run `evaluate_translation_quality` to score them.
+- Ordered by term, in the order strings are listed in the project.
+- A score describes the translation as it was when evaluated. A translation edited since it was scored has no valid score and is dropped from the list until re-evaluated — compare the translation's `updated` date against the score's `evaluated_at` for the edge case of an edit landing mid-page.
+- Paginated: when the response carries `nextCursor`, call again with the same arguments plus `cursor` set to that value, and repeat until there is no `nextCursor`. Treat the cursor as opaque — don't parse, modify, or construct one.
 
 ---
 
