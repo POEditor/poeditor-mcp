@@ -22,7 +22,18 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   `moderate`, `allow_add_language`, `lock_complete`,
   `fuzzy_trigger_on_default_language`) returned by `get_project_details`
   and writable via `update_project`
-- Total tool count: 34 → 38
+- `figma_export` — export a Figma page's text layers into a POEditor
+  project as terms and reference-language translations, via the user's own
+  Figma MCP connection and client-side hook
+- `figma_import` — import POEditor translations into Figma Variables for a
+  page, binding text layers to per-language modes; non-destructive and
+  idempotent
+- `figma_remove_localization_collection` — destructive recovery tool to
+  remove the `POEditor Localization` variable collection and its bindings
+  from a file
+- `figma_remove_obsolete` — delete POEditor terms whose source Figma text
+  node no longer exists
+- Total tool count: 34 → 38 → 43
 
 ---
 

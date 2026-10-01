@@ -6,7 +6,7 @@
 
 **Official Model Context Protocol (MCP) server for [POEditor](https://poeditor.com)** — the translation management platform. Connect any MCP-compatible AI assistant directly to your POEditor projects.
 
-> 38 tools across the full POEditor v2 API. Manage projects, terms, translations, contributors, and languages. Auto-translate with Google, Microsoft, or DeepL. Export to any format your client supports. OAuth 2.1 with PKCE.
+> 43 tools across the full POEditor v2 API. Manage projects, terms, translations, contributors, and languages. Auto-translate with Google, Microsoft, or DeepL. Round-trip text with Figma. Export to any format your client supports. OAuth 2.1 with PKCE.
 
 ---
 
@@ -177,6 +177,7 @@ List all my POEditor projects
 | **Quality** | QA checks, AI quality evaluation (MQM scoring), list stored evaluations |
 | **Contributors** | list, add, remove |
 | **Automation** | automatic translation (Google, Microsoft, DeepL) |
+| **Figma** | export page to POEditor, import translations as Figma variables, remove localization collection, remove obsolete terms |
 | **Account** | account info |
 
 Full schema: see [`docs/tools.md`](./docs/tools.md).
@@ -208,6 +209,7 @@ Export Spanish translations from project 123456 as JSON
 Auto-translate untranslated French terms in project 123456 using DeepL
 Show translation progress for all languages in project 123456
 List all contributors for project 123456
+Export the "Checkout" page from this Figma file into project 123456
 ```
 
 ---
@@ -226,9 +228,10 @@ Anything that speaks MCP. Works with:
 
 ## Features
 
-- 38 tools — full POEditor v2 API coverage plus tools beyond the raw API
+- 43 tools — full POEditor v2 API coverage plus tools beyond the raw API
 - Export to any format POEditor supports
 - Automatic translation via Google, Microsoft, or DeepL
+- Figma round-trip via the user's own Figma MCP connection
 - OAuth 2.1 with PKCE
 - Streamable HTTP transport (MCP spec compliant)
 - ISO 27001 certified infrastructure

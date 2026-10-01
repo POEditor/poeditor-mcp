@@ -177,6 +177,93 @@ Four tools write translations — pick the right one:
 
 ---
 
+## Figma
+
+Round-trips text between a Figma file and a POEditor project. Requires the
+user's own Figma MCP connection and client-side hook — this server never
+contacts Figma or holds a Figma credential; it only reads/writes the
+POEditor side and exchanges opaque scripts with the client for the Figma side.
+
+| Tool | Description |
+|---|---|
+| `figma_export` | Export the text layers of one Figma page into a POEditor project as terms + reference-language translations |
+| `figma_import` | Import POEditor translations into Figma Variables for one page — one variable collection (`POEditor Localization`), one mode per language, text layers bound to their variable |
+| `figma_remove_localization_collection` | Destructive recovery: remove the `POEditor Localization` variable collection and its bindings from a file, freezing whatever text is currently displayed |
+| `figma_remove_obsolete` | Delete POEditor terms whose source Figma text node no longer exists |
+
+### key_mode
+
+All four tools take a `key_mode`, required with no default, describing how a
+Figma text layer maps to a POEditor term. It must be the same mode across
+export, import, and cleanup for a given project/file pair — mixing modes
+creates a second, unrelated set of terms.
+
+| Mode | Term shape | Notes |
+|---|---|---|
+| `id` | Figma node id, e.g. `123:456` | Survives renames and moves to another page; node ids are unique within a file |
+| `name` | Figma layer name, e.g. `login_button` | Readable in POEditor; renaming a layer creates a new term; two same-named layers with different text collide (last in document order wins, reported under `duplicates`) |
+| `page_scoped_id` | `page:<page_id>\|node:<node_id>` | The only mode where a term is provably one this integration created — required for `figma_remove_obsolete` to delete rather than preview |
+
+Neither the tool nor the assistant chooses a `key_mode` on the user's
+behalf — omitting it returns `needs_input` listing the three options.
+
+### figma_export
+
+- Project, page, and reference language are discovered, not looked up or
+  guessed: pass the bare `figma_file_key` (and `figma_url` if the user gave a
+  link) and `project` by name — a file with one page exports immediately, a
+  file with several returns `needs_input` with the page choices.
+- `host_figma_snapshot` is attached by a client-side PreToolUse hook that runs
+  a read-only script over the user's existing Figma MCP connection; it is
+  never supplied by the caller. A response of `figma_host_snapshot_required`
+  means that hook isn't installed — there is no fallback read path.
+- Paginates large pages via an opaque `continuation` token, echoed back
+  unmodified on the next call.
+- `accept_conflicts` resolves terms edited in both Figma and POEditor since
+  the last `figma_import` (default: left unwritten) — `true` for all
+  conflicts, or a list of specific POEditor terms.
+
+### figma_import
+
+- Non-destructive and idempotent — only creates, updates, and binds; never
+  deletes a variable, collection, node, or POEditor term, and never touches a
+  remote/library collection. Re-running is always safe.
+- One page per run; there is no whole-file mode.
+- `languages` and `reference_language` default to the project's own — omit
+  them rather than pre-fetching with `list_languages`. A Figma variable
+  collection holds at most 10 modes, capping languages per run at 10.
+- Values edited directly in Figma since the last import are kept and
+  reported as `figma_edit_kept`, not overwritten — run `figma_export` to send
+  those edits back to POEditor as fuzzy translations, or pass
+  `overwrite_figma_edits: true` to let POEditor's text win instead.
+- Drives Figma through round trips with the client: each response may carry a
+  script plus a signed `session_state` to echo back unchanged along with
+  `result` (whatever the client's `use_figma` call returned, untouched).
+
+### figma_remove_localization_collection
+
+- **Destructive** and user-driven — never run without the user explicitly
+  asking, and never combine "switch language, preview, confirm" into one
+  automated step.
+- Whole file, not one page — a variable collection is file-level.
+- Freezes whatever the file is **currently displaying**, not the POEditor
+  reference language; switch the file (and any frame set to its own mode) to
+  the language to keep before confirming.
+- Preview by default (`confirm: false`); pass `confirm: true` to execute.
+  Atomic: if any text layer can't be unbound safely, nothing is deleted.
+
+### figma_remove_obsolete
+
+- **Destructive when confirmed**, read-only against Figma otherwise — no
+  Figma node, variable, collection, or binding is ever modified.
+- Safety depends on `key_mode`: `page_scoped_id` is provably safe to confirm;
+  `id` checks existence authoritatively but ownership is only heuristic
+  (review before confirming); `name` is preview-only — `confirm` is refused.
+- Preview by default (`confirm: false`); a positive "not there" lookup is
+  required to delete — a failed lookup keeps the term rather than deleting it.
+
+---
+
 ## Account
 
 | Tool | Description |
