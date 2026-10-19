@@ -122,6 +122,14 @@ Four tools write translations — pick the right one:
 |---|---|
 | `get_translation_status` | Translation progress per language: total strings, translated, fuzzy, and proofread counts |
 | `get_proofread_progress` | Proofreading progress per language: total strings, proofread count, and percentage (requires proofreading enabled) |
+| `get_project_stats` | Daily translation activity for a project over a date range — strings, words, chars, source counts, per-language breakdown, and contributor emails — plus a `total` for the whole range |
+
+### Activity stats
+
+`get_project_stats` and `get_contributor_stats` share the same date handling:
+
+- `startDay` / `endDay` are `Y-m-d`, inclusive. `endDay` defaults to yesterday — no data exists for the current day yet. `startDay` defaults to 29 days before `endDay` (a 30-day window).
+- Pass `language` to restrict the stats to one language.
 
 ---
 
@@ -132,6 +140,7 @@ Four tools write translations — pick the right one:
 | `list_contributors` | List contributors across all projects, or filter by project or language |
 | `add_contributor` | Add a contributor (or admin) to a project; optionally grant proofreading rights |
 | `remove_contributor` | Remove a contributor or admin from a project |
+| `get_contributor_stats` | Daily translation activity for one contributor (by `email`) over a date range, plus a `total`. Pass a project `id` to restrict to one project; omit it to aggregate across every project you own or administer. The contributor must belong to one of those projects. See [Activity stats](#activity-stats). |
 
 ---
 
@@ -158,6 +167,80 @@ Four tools write translations — pick the right one:
 - Ordered by term, in the order strings are listed in the project.
 - A score describes the translation as it was when evaluated. A translation edited since it was scored has no valid score and is dropped from the list until re-evaluated — compare the translation's `updated` date against the score's `evaluated_at` for the edge case of an edit landing mid-page.
 - Paginated: when the response carries `nextCursor`, call again with the same arguments plus `cursor` set to that value, and repeat until there is no `nextCursor`. Treat the cursor as opaque — don't parse, modify, or construct one.
+
+---
+
+## Glossaries
+
+Glossaries are account-level: owned by one account and assigned to projects,
+where they're used in the editor, in QA checks, and in automatic and AI
+translation where enabled. A glossary can be assigned to many projects; a
+project has at most one glossary. Requires a plan that includes glossaries.
+
+| Tool | Description |
+|---|---|
+| `list_glossaries` | Glossaries the account owns, plus shared glossaries of projects it's an admin or contributor in — with source language, shared flag, your role, term/translation counts, and assigned projects. Also returns the account's glossary string limit. |
+| `get_glossary_details` | One glossary: name, source language, shared flag, your role and permissions, counts, languages, assigned projects, and the owner's string limit |
+| `add_glossary` | Create a glossary (owner). Name must be unique, at most 30 characters, with at least 3 consecutive letters or digits. Optionally `shared`. |
+| `update_glossary` | Rename, change source language, or share/unshare (owner). Unsharing removes access for the admins and contributors of its projects. |
+| `delete_glossary` | Permanently delete a glossary with all its terms and translations, and unassign it everywhere (owner). Cannot be undone. |
+| `assign_glossary_to_projects` | Assign a glossary to one or more projects. Projects that already have another glossary are skipped unless `replace_existing` is true. |
+| `unassign_glossary_from_projects` | Remove a glossary from projects; the glossary and its terms are kept |
+| `list_glossary_terms` | Terms with their translations; filter by `languages`, `part_of_speech`, or `search`. Paginated, 100 terms per call. |
+| `add_glossary_terms` | Add terms, optionally with translations. Max 100 per call. |
+| `update_glossary_terms` | Edit term text, part of speech, description, or `do_not_translate` by term id. Max 100 per call. |
+| `delete_glossary_terms` | Permanently delete terms and their translations by term id. Max 100 per call. |
+| `set_glossary_translations` | Add or replace term translations (called *definitions* in the POEditor UI). Max 100 per call. |
+| `delete_glossary_translations` | Delete translations of terms; the terms stay. Max 100 per call. |
+| `import_glossary` | Bulk-load terms and translations from CSV text (owner) |
+| `export_glossary` | Export a whole glossary as CSV text, in the same format `import_glossary` reads |
+
+### Glossary roles
+
+| Role | Can do |
+|---|---|
+| Owner | Everything, including create, update, delete, assign/unassign, and import |
+| Admin of an assigned project | Add, edit, and delete terms; translate into any language; export (shared glossaries only) |
+| Contributor of an assigned project | See the glossary and translate into the languages they have access to (shared glossaries only) |
+
+Assign/unassign requires owning both the glossary and the projects.
+
+### Glossary terms
+
+- A term is unique by its **text + part of speech** — the same text can exist
+  once as a noun and once as a verb. `part_of_speech` is one of `other`
+  (default), `noun`, `verb`, `adjective`, `pronoun`.
+- `do_not_translate` marks brand or product names that must stay
+  untranslated; such a term cannot have translations. Setting it to `true`
+  via `update_glossary_terms` (or `import_glossary` with `overwrite`)
+  **deletes** all existing translations of that term.
+- `description` is optional, at most 200 characters.
+- Every term and every translation counts as one string against the owner's
+  glossary string limit. Items past the limit are rejected (or, on import,
+  skipped and reported as `limit_reached`).
+- `add_glossary_terms`, `update_glossary_terms`, and
+  `set_glossary_translations` process items one by one and report a result
+  per item — one bad item doesn't stop the rest.
+- `list_glossary_terms` paginates with an opaque `nextCursor`: call again with
+  the same arguments plus `cursor`, until there is no `nextCursor`.
+- A project with unreviewed AI glossary term suggestions can't have its
+  glossary unassigned or replaced until they're resolved in the POEditor UI.
+
+### import_glossary / export_glossary CSV
+
+Same format the POEditor UI uses. The header row requires `term`; `part_of_speech`,
+`description`, and `do_not_translate` (`1`/`yes`/`true`) are optional; every
+other column is a language code holding translations (unknown codes are ignored).
+
+```csv
+term,part_of_speech,description,fr,de
+Dashboard,noun,Main screen,Tableau de bord,Dashboard
+```
+
+Terms are matched by text + part of speech: new ones are added; existing ones
+only get their missing translations — unless `overwrite` is true, which also
+replaces description, `do_not_translate`, and existing translations. Import
+never deletes terms.
 
 ---
 

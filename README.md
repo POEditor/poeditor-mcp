@@ -6,7 +6,7 @@
 
 **Official Model Context Protocol (MCP) server for [POEditor](https://poeditor.com)** — the translation management platform. Connect any MCP-compatible AI assistant directly to your POEditor projects.
 
-> 43 tools across the full POEditor v2 API. Manage projects, terms, translations, contributors, and languages. Auto-translate with Google, Microsoft, or DeepL. Round-trip text with Figma. Export to any format your client supports. OAuth 2.1 with PKCE.
+> 59 tools across the full POEditor v2 API. Manage projects, terms, translations, contributors, and languages. Maintain glossaries. Auto-translate with Google, Microsoft, or DeepL. Round-trip text with Figma. Export to any format your client supports. OAuth 2.1 with PKCE.
 
 ---
 
@@ -173,9 +173,10 @@ List all my POEditor projects
 | **Languages** | available languages, list project languages, add, update, delete |
 | **Terms** | list, add, update, delete, details, comment |
 | **Translations** | commit, propose, update, delete, fill from TM, list fuzzy, list pending proofread, list untranslated, mark proofread |
-| **Progress** | translation status, proofread progress |
+| **Progress** | translation status, proofread progress, project activity stats |
 | **Quality** | QA checks, AI quality evaluation (MQM scoring), list stored evaluations |
-| **Contributors** | list, add, remove |
+| **Contributors** | list, add, remove, contributor activity stats |
+| **Glossaries** | list, details, add, update, delete, assign/unassign to projects, list/add/update/delete terms, set/delete translations, CSV import/export |
 | **Automation** | automatic translation (Google, Microsoft, DeepL) |
 | **Figma** | export page to POEditor, import translations as Figma variables, remove localization collection, remove obsolete terms |
 | **Account** | account info |
@@ -209,6 +210,8 @@ Export Spanish translations from project 123456 as JSON
 Auto-translate untranslated French terms in project 123456 using DeepL
 Show translation progress for all languages in project 123456
 List all contributors for project 123456
+Add "Dashboard" as a do-not-translate term to my product glossary
+How many words did each contributor translate in project 123456 last month?
 Export the "Checkout" page from this Figma file into project 123456
 ```
 
@@ -228,8 +231,9 @@ Anything that speaks MCP. Works with:
 
 ## Features
 
-- 43 tools — full POEditor v2 API coverage plus tools beyond the raw API
+- 59 tools — full POEditor v2 API coverage plus tools beyond the raw API
 - Export to any format POEditor supports
+- Glossaries shared across projects, with CSV import/export
 - Automatic translation via Google, Microsoft, or DeepL
 - Figma round-trip via the user's own Figma MCP connection
 - OAuth 2.1 with PKCE

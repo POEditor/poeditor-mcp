@@ -33,7 +33,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   from a file
 - `figma_remove_obsolete` — delete POEditor terms whose source Figma text
   node no longer exists
-- Total tool count: 34 → 38 → 43
+- `get_project_stats` — daily translation activity for a project over a
+  date range (strings, words, chars, per-language breakdown, contributors)
+- `get_contributor_stats` — daily translation activity for one contributor,
+  per project or aggregated across all projects you own or administer
+- Glossary management (15 tools): `list_glossaries`,
+  `get_glossary_details`, `add_glossary`, `update_glossary`,
+  `delete_glossary`, `assign_glossary_to_projects`,
+  `unassign_glossary_from_projects`, `list_glossary_terms`,
+  `add_glossary_terms`, `update_glossary_terms`, `delete_glossary_terms`,
+  `set_glossary_translations`, `delete_glossary_translations`,
+  `import_glossary`, `export_glossary` (CSV)
+- Total tool count: 34 → 38 → 43 → 59 (the earlier 43 overcounted by one;
+  the actual count before this release was 42)
 
 ---
 
