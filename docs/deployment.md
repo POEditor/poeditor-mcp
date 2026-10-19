@@ -1,6 +1,6 @@
 # Deployment
 
-The POEditor MCP server is a **remote MCP server** operated by POEditor.
+The official POEditor MCP server is a **remote MCP server** operated by POEditor.
 There is nothing to install or deploy on your side — connect your MCP client
 directly to the endpoint.
 

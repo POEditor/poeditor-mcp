@@ -1,4 +1,4 @@
-# POEditor MCP Server
+# Official POEditor MCP Server
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP](https://img.shields.io/badge/MCP-compatible-blue)](https://modelcontextprotocol.io)
@@ -16,7 +16,7 @@
 https://mcp.poeditor.com/mcp
 ```
 
-Remote MCP server, hosted by POEditor. No installation required. Streamable HTTP transport, MCP spec compliant.
+Official remote MCP server, hosted by POEditor. No installation required. Streamable HTTP transport, MCP spec compliant.
 
 ---
 

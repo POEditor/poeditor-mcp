@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to the POEditor MCP server.
+All notable changes to the official POEditor MCP server.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
