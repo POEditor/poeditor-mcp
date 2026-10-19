@@ -1,0 +1,26 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.POEditor/mcp.poeditor.com",
+  "title": "POEditor",
+  "description": "Official MCP server for POEditor, the translation management system. Hosted, OAuth 2.1.",
+  "websiteUrl": "https://mcp.poeditor.com",
+  "repository": {
+    "url": "https://github.com/POEditor/poeditor-mcp",
+    "source": "github"
+  },
+  "version": "1.1.0",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.poeditor.com/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Optional. \"Bearer <POEditor API token>\" from poeditor.com/account/api. Omit to sign in with OAuth.",
+          "isRequired": false,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}
