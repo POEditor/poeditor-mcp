@@ -44,6 +44,15 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   `add_glossary_terms`, `update_glossary_terms`, `delete_glossary_terms`,
   `set_glossary_translations`, `delete_glossary_translations`,
   `import_glossary`, `export_glossary` (CSV)
+- `stringsdict` (iOS Stringsdict) format for `export_strings_file` and
+  `upload_strings_file`
+- `tags_match` (`all` / `any` / `exclude`) for `export_strings_file` and
+  `automatic_translation`; `automatic_translation` now takes `tags` as an
+  array and rejects unknown tag names
+- `get_project_details` returns the assigned `glossary`
+- Figma tools accept `project` by name or id; `figma_import` discovers the
+  page like `figma_export`; `figma_remove_localization_collection` adds
+  `accept_non_default_mode`
 - Total tool count: 34 → 38 → 43 → 59 (the earlier 43 overcounted by one;
   the actual count before this release was 42)
 

@@ -25,13 +25,21 @@ These are two different entities.
 | Tool | Description |
 |---|---|
 | `list_projects` | List all projects accessible to the authenticated user |
-| `get_project_details` | Get details of a project: term count, reference language, languages, tags, settings, and creation date |
-| `add_project` | Create a new project |
+| `get_project_details` | Get details of a project: term count, reference language, fallback language, languages with per-language progress, tags, settings, assigned glossary, and creation date |
+| `add_project` | Create a new project in the authenticated account — there is no account parameter. The response includes an `account` block showing where the project was created. |
 | `update_project` | Update project name, description, reference language, fallback language, or proofreading settings (`proofreading`, `lock_proofread`) |
 | `delete_project` | Permanently delete a project (owner only) |
 | `sync_project` | Replace all project terms with the provided list — terms not in the list are deleted. Use with caution. |
-| `upload_strings_file` | Import from a file; the `updating` param controls what is imported: `terms`, `translations`, or `terms_translations` |
-| `export_strings_file` | Export translations in any supported format — returns a 10-minute download URL |
+| `upload_strings_file` | Import from a file; the `updating` param controls what is imported: `terms`, `translations`, or `terms_translations`. Format is auto-detected from `file_name` or forced with `type`. Optional `overwrite`, `sync_terms` (delete terms not in the file), `fuzzy_trigger`, and `tags`. Limited to one request every 20 seconds. |
+| `export_strings_file` | Export translations in any supported format — returns a 10-minute download URL. Optional `filters`, `order`, `options`, and `tags` with `tags_match` (see [Tag filters](#tag-filters)). |
+
+### Assigned glossary
+
+`get_project_details` returns a `glossary` object, or `null` when the project
+has none. When `accessible` is true it carries `id`, `name`,
+`source_language`, and `shared`, and can be opened with `get_glossary_details`
+or `list_glossary_terms`. When `accessible` is false the project has a glossary
+you can't access, and its name is masked as `######`.
 
 ### Project settings flags
 
@@ -47,9 +55,25 @@ Returned by `get_project_details` in the `settings` object; some are writable vi
 | `moderate`, `allow_add_language`, `lock_complete` | Public-project workflow flags | Present only when the project is public (`public: 1`) |
 | `fuzzy_trigger_on_default_language` | Whether editing the reference-language translation marks the same term's other-language translations as fuzzy | Present only when a reference language is set |
 
-### export_strings_file formats
+### File formats
 
-`po`, `pot`, `mo`, `json`, `key_value_json`, `i18next`, `arb`, `csv`, `ini`, `properties`, `resw`, `resx`, `ts`, `apple_strings`, `xliff`, `xliff_1_2`, `rise_360_xliff`, `xlf`, `xmb`, `xtb`, `android_strings`, `yml`, `xcstrings`, `xls`, `xlsx`
+Used by `export_strings_file` and `upload_strings_file` (`type`):
+
+`po`, `pot`, `mo` (export only), `json`, `key_value_json`, `i18next`, `arb`, `csv`, `ini`, `properties`, `resw`, `resx`, `ts`, `apple_strings`, `xliff`, `xcstrings`, `stringsdict`, `xliff_1_2`, `rise_360_xliff`, `xlf`, `xmb`, `xtb`, `android_strings`, `yml`, `xls`, `xlsx`
+
+### Tag filters
+
+`export_strings_file` and `automatic_translation` take `tags` (tag names) and
+`tags_match`:
+
+| `tags_match` | Selects |
+|---|---|
+| `all` (default) | Terms carrying every listed tag |
+| `any` | Terms carrying at least one listed tag |
+| `exclude` | Terms carrying none of the listed tags (untagged terms included) |
+
+`automatic_translation` rejects a tag name that doesn't exist rather than
+ignoring it, so a typo never translates the whole language.
 
 ---
 
@@ -71,7 +95,7 @@ Returned by `get_project_details` in the `settings` object; some are writable vi
 |---|---|
 | `list_terms` | List terms in a project; pass a language code to include translations |
 | `add_terms` | Add one or more terms |
-| `update_terms` | Rename terms or update context, reference, plural, or tags |
+| `update_terms` | Rename terms or update context, reference, plural, or tags; `fuzzy_trigger` marks their translations fuzzy |
 | `delete_terms` | Delete terms and all their translations |
 | `get_term_details` | Full details for a single term: content, plural, tags, comments, and all translations across every project language |
 | `add_term_comment` | Add a comment to one or more terms |
@@ -91,6 +115,15 @@ Four tools write translations — pick the right one:
 | `update_translations` | ✗ | ✓ | ✗ |
 | `update_language` | ✓ | ✓ | per-item flag |
 
+For a plural term, `translation.content` is an object keyed by CLDR plural
+form (`zero`, `one`, `two`, `few`, `many`, `other`) instead of a string; only
+the forms the target language uses are required:
+
+```json
+{ "term": "%d Projects available", "context": "project list",
+  "translation": { "content": { "one": "Un projet disponible", "other": "%d Projets disponibles" } } }
+```
+
 | Tool | Description |
 |---|---|
 | `commit_translations` | Add translations for a language — fills only untranslated terms, never overwrites existing |
@@ -98,7 +131,7 @@ Four tools write translations — pick the right one:
 | `update_translations` | Overwrite existing translations for a language — untranslated terms are skipped |
 | `update_language` | Fill untranslated AND overwrite existing in one call — see Languages section |
 | `delete_translations` | Remove translations for specific terms in a language |
-| `fill_from_translation_memory` | Fill empty translations with exact matches from Translation Memory; paginates in batches of 100 |
+| `fill_from_translation_memory` | Fill empty translations with exact matches from Translation Memory. Processes at most 100 terms per call: when filling a whole language, call again with `start_from_term_id` set to `next_term` until `done` is true. A `terms` list is capped at 100. |
 
 ### Reading translations
 
@@ -137,7 +170,7 @@ Four tools write translations — pick the right one:
 
 | Tool | Description |
 |---|---|
-| `list_contributors` | List contributors across all projects, or filter by project or language |
+| `list_contributors` | List contributors across all projects, or filter by project, or by project and language |
 | `add_contributor` | Add a contributor (or admin) to a project; optionally grant proofreading rights |
 | `remove_contributor` | Remove a contributor or admin from a project |
 | `get_contributor_stats` | Daily translation activity for one contributor (by `email`) over a date range, plus a `total`. Pass a project `id` to restrict to one project; omit it to aggregate across every project you own or administer. The contributor must belong to one of those projects. See [Activity stats](#activity-stats). |
@@ -157,7 +190,9 @@ Four tools write translations — pick the right one:
 - By default only translations without a score are evaluated; translations that already have a score are skipped unless `include_evaluated` is set, which re-evaluates and replaces them. Edited translations whose score has gone stale are always re-evaluated regardless of `include_evaluated`.
 - Processes at most 50 terms per call, in ascending term-id order. When evaluating a whole language (no `terms` list), the response includes `next_term` and `done`; if `done` is false, call again with the same arguments plus `start_from_term_id` set to `next_term` to score the next batch, and repeat until `done` is true.
 - Pass `terms` (max 50) to restrict evaluation to specific terms instead of the whole language.
-- `source_language` optionally overrides the project's reference language as the comparison target.
+- `source_language` optionally overrides the project's reference language as the comparison target; without it, a project with no reference language returns an error.
+- `context` optionally gives the AI a short project description to improve scoring.
+- Keep `include_evaluated` the same across every call of one paginated run.
 - Scores and their MQM reasons are stored on the project and shown in the POEditor editor.
 
 ### list_quality_evaluations details
@@ -248,7 +283,7 @@ never deletes terms.
 
 | Tool | Description |
 |---|---|
-| `automatic_translation` | Machine-translate untranslated terms using Google, Microsoft, or DeepL; can filter by tag |
+| `automatic_translation` | Machine-translate untranslated terms using Google, Microsoft, or DeepL; filter with `tags` and `tags_match` (see [Tag filters](#tag-filters)). When POEditor's automatic translation characters are used, the response includes how many are left on the account. |
 
 ### automatic_translation providers
 
@@ -290,6 +325,21 @@ creates a second, unrelated set of terms.
 Neither the tool nor the assistant chooses a `key_mode` on the user's
 behalf — omitting it returns `needs_input` listing the three options.
 
+### Project and file identification
+
+- All four tools take `project` as a POEditor project **name or id** — the
+  server resolves it, so there's no need to call `list_projects` first. A
+  name matching several projects or none returns `needs_input` with the
+  candidates. The older `id` / `project_id` fields are still honoured.
+- `figma_file_key` and `figma_url` each accept either a bare file key or a
+  full Figma URL. (`figma_export` is the exception: its client-side hook needs
+  the bare key in `figma_file_key`, with the link in `figma_url`.) Two fields
+  naming different files are refused.
+- `figma_export` and `figma_import` discover the page: omit `page`/`page_id`
+  and a single-page file runs immediately, while a multi-page file returns
+  `needs_input` with the choices. A `node-id` in a pasted URL selects its page.
+  `page` accepts a page name or id.
+
 ### figma_export
 
 - Project, page, and reference language are discovered, not looked up or
@@ -311,7 +361,8 @@ behalf — omitting it returns `needs_input` listing the three options.
 - Non-destructive and idempotent — only creates, updates, and binds; never
   deletes a variable, collection, node, or POEditor term, and never touches a
   remote/library collection. Re-running is always safe.
-- One page per run; there is no whole-file mode.
+- One page per run; there is no whole-file mode. The page is discovered as
+  described above.
 - `languages` and `reference_language` default to the project's own — omit
   them rather than pre-fetching with `list_languages`. A Figma variable
   collection holds at most 10 modes, capping languages per run at 10.
@@ -334,6 +385,13 @@ behalf — omitting it returns `needs_input` listing the three options.
   the language to keep before confirming.
 - Preview by default (`confirm: false`); pass `confirm: true` to execute.
   Atomic: if any text layer can't be unbound safely, nothing is deleted.
+- A confirmed run is refused if any bound text layer is showing a mode other
+  than the collection's default (the reference language); pass
+  `accept_non_default_mode: true` only when the user wants that other
+  language frozen.
+- `project_id` is required when the collection carries an ownership stamp
+  from the POEditor Figma plugin, so the stamp can be checked. Collections
+  created by `figma_import` carry no stamp.
 
 ### figma_remove_obsolete
 
@@ -344,6 +402,9 @@ behalf — omitting it returns `needs_input` listing the three options.
   (review before confirming); `name` is preview-only — `confirm` is refused.
 - Preview by default (`confirm: false`); a positive "not there" lookup is
   required to delete — a failed lookup keeps the term rather than deleting it.
+- Only context-less terms of the shape the chosen `key_mode` creates are
+  considered. With `page_scoped_id`, a node moved to another page counts as
+  obsolete; with `id`, the page isn't checked.
 
 ---
 
@@ -351,4 +412,4 @@ behalf — omitting it returns `needs_input` listing the three options.
 
 | Tool | Description |
 |---|---|
-| `get_account_info` | Account name, email, plan, enabled features, and total string count |
+| `get_account_info` | Account name, email, plan, plan expiry date, enabled features, and total string count |
