@@ -3,12 +3,12 @@
   "name": "io.github.POEditor/mcp.poeditor.com",
   "title": "POEditor",
   "description": "Official MCP server for POEditor, the translation management system. Hosted, OAuth 2.1.",
-  "websiteUrl": "https://mcp.poeditor.com",
+  "websiteUrl": "https://poeditor.com/kb/how-to-set-up-and-use-the-poeditor-mcp-server",
   "repository": {
     "url": "https://github.com/POEditor/poeditor-mcp",
     "source": "github"
   },
-  "version": "1.1.0",
+  "version": "1.1.1",
   "remotes": [
     {
       "type": "streamable-http",
